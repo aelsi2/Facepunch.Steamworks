@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>Steamworks</RootNamespace>
+		<TargetFrameworks>netstandard2.1</TargetFrameworks>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>	
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetOS)' == ''">
+		<TargetOS>windows</TargetOS>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<DefineConstants Condition="'$(TargetOS)' == 'windows'">$(DefineConstants);PLATFORM_WIN</DefineConstants>
+		<DefineConstants Condition="'$(TargetOS)' == 'unix'">$(DefineConstants);PLATFORM_UNIX</DefineConstants>
+	</PropertyGroup>
+</Project>
