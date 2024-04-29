@@ -16,16 +16,16 @@
 	</PropertyGroup>
 
 	<PropertyGroup Label="PackageInfo">
-		<PackageId>Facepunch.Steamworks</PackageId>
+		<PackageId>aelsi2.Facepunch.Steamworks</PackageId>
 		<Version>2.3.4</Version>
 		<Authors>Garry Newman, Andrey Eliseev</Authors>
-		<Description>Steamworks implementation with an emphasis on making things easy.</Description>
+		<Description>Steamworks implementation with an emphasis on making things easy. This is a fork with some packaging changes and fixes.</Description>
 		<PackageTags>facepunch;steam;steamworks;valve</PackageTags>
 		<PackageIcon>icon.jpg</PackageIcon>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
-		<PackageProjectUrl>https://github.com/Facepunch/Facepunch.Steamworks</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/aelsi2/Facepunch.Steamworks</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<RepositoryUrl>https://github.com/Facepunch/Facepunch.Steamworks</RepositoryUrl>
+		<RepositoryUrl>https://github.com/aelsi2/Facepunch.Steamworks</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 
