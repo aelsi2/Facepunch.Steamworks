@@ -18,6 +18,7 @@ internal class BaseType
 		type = Cleanup.ConvertType( type );
 
 		if ( varname == "ppOutMessages" ) return new PointerType { NativeType = "void *", VarName = varname };
+		if ( varname == "ppchFilters" ) return new PointerType { NativeType = "void *", VarName = varname };
 		if ( type == "SteamAPIWarningMessageHook_t" ) return new PointerType { NativeType = type, VarName = varname };
 
 		if ( type == "SteamAPICall_t" ) return new SteamApiCallType { NativeType = type, VarName = varname, CallResult = callresult };

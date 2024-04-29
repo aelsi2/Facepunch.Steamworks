@@ -8,7 +8,7 @@ namespace Steamworks.ServerList
 {
 	public class LocalNetwork : Base
 	{
-		internal override void LaunchQuery()
+		internal override void LaunchQuery( IntPtr filters, uint filterCount )
 		{
 			request = Internal.RequestLANServerList( AppId.Value, IntPtr.Zero );
 		}

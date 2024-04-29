@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Steamworks.Data;
 
 namespace Steamworks
 {
@@ -148,9 +150,11 @@ namespace Steamworks
 		[TestMethod]
 		public async Task FilterByMap()
 		{
+			string mapName = "Procedural Map";
+
 			using ( var list = new ServerList.Internet() )
 			{
-				list.AddFilter( "map", "de_dust" );
+				list.AddFilter( "map", mapName );
 
 				var success = await list.RunQueryAsync();
 
@@ -160,9 +164,36 @@ namespace Steamworks
 
 				foreach ( var server in list.Responsive )
 				{
-					Assert.AreEqual( server.Map.ToLower(), "de_dust" );
+					Assert.AreEqual( server.Map, mapName );
 
 					Console.WriteLine( $"[{server.Map}] - {server.Name}" );
+				}
+			}
+		}
+
+		[TestMethod]
+		public async Task FilterByMapAndNoPlayers()
+		{
+			string mapName = "Procedural Map";
+
+			using ( var list = new ServerList.Internet() )
+			{
+				list.AddFilter( "and", "2" );
+				list.AddFilter( "map", mapName );
+				list.AddFilter( "noplayers", string.Empty );
+
+				var success = await list.RunQueryAsync();
+
+				Console.WriteLine( $"success {success}" );
+				Console.WriteLine( $"Found {list.Responsive.Count} Responsive Servers" );
+				Console.WriteLine( $"Found {list.Unresponsive.Count} Unresponsive Servers" );
+
+				foreach ( var server in list.Responsive )
+				{
+					Assert.AreEqual( mapName, server.Map );
+					Assert.AreEqual( 0, server.Players );
+
+					Console.WriteLine( $"[{server.Map}] - {server.Name} ({server.Players})" );
 				}
 			}
 		}

@@ -8,10 +8,9 @@ namespace Steamworks.ServerList
 {
 	public class History : Base
 	{
-		internal override void LaunchQuery()
+		internal override void LaunchQuery( IntPtr filters, uint filterCount )
 		{
-			var filters = GetFilters();
-			request = Internal.RequestHistoryServerList( AppId.Value, ref filters, (uint)filters.Length, IntPtr.Zero );
+			request = Internal.RequestHistoryServerList( AppId.Value, filters, filterCount, IntPtr.Zero );
 		}
 	}
 }

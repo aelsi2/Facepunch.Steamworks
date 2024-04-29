@@ -8,11 +8,9 @@ namespace Steamworks.ServerList
 {
 	public class Internet : Base
 	{
-		internal override void LaunchQuery()
+		internal override void LaunchQuery( IntPtr filters, uint filterCount )
 		{
-			var filters = GetFilters();
-
-			request = Internal.RequestInternetServerList( AppId.Value, ref filters, (uint)filters.Length, IntPtr.Zero );
+			request = Internal.RequestInternetServerList( AppId.Value, filters, filterCount, IntPtr.Zero );
 		}
 	}
 }

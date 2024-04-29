@@ -56,35 +56,50 @@ namespace Steamworks.ServerList
 			var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 
 			Reset();
-			LaunchQuery();
 
-			var thisRequest = request;
+			IntPtr filterPointer = IntPtr.Zero;
+			int filterCount = 0;
 
-			while ( IsRefreshing )
+			try
 			{
-				await Task.Delay( 33 );
+				AllocateFilters( out filterPointer, out filterCount );
+				LaunchQuery( filterPointer, unchecked((uint)filterCount) );
 
-				//
-				// The request has been cancelled or changed in some way
-				//
-				if ( request.Value == IntPtr.Zero || thisRequest.Value != request.Value )
-					return false;
+				var thisRequest = request;
 
-				if ( !SteamClient.IsValid )
-					return false;
-
-				var r = Responsive.Count;
-
-				UpdatePending();
-				UpdateResponsive();
-
-				if ( r != Responsive.Count )
+				while ( IsRefreshing )
 				{
-					InvokeChanges();
-				}
+					await Task.Delay( 33 );
 
-				if ( stopwatch.Elapsed.TotalSeconds > timeoutSeconds )
-					break;
+					//
+					// The request has been cancelled or changed in some way
+					//
+					if ( request.Value == IntPtr.Zero || thisRequest.Value != request.Value )
+						return false;
+
+					if ( !SteamClient.IsValid )
+						return false;
+
+					var r = Responsive.Count;
+
+					UpdatePending();
+					UpdateResponsive();
+
+					if ( r != Responsive.Count )
+					{
+						InvokeChanges();
+					}
+
+					if ( stopwatch.Elapsed.TotalSeconds > timeoutSeconds )
+					{
+						Cancel();
+						break;
+					}
+				}
+			}
+			finally
+			{
+				ReleaseFilters( filterPointer, filterCount );
 			}
 
 			MovePendingToUnresponsive();
@@ -96,14 +111,40 @@ namespace Steamworks.ServerList
 		public virtual void Cancel() => Internal.CancelQuery( request );
 
 		// Overrides
-		internal abstract void LaunchQuery();
+		internal abstract void LaunchQuery(IntPtr filters, uint filterCount);
 
 		internal HServerListRequest request;
 
 		#region Filters
 
 		internal List<MatchMakingKeyValuePair> filters = new List<MatchMakingKeyValuePair>();
-		internal virtual MatchMakingKeyValuePair[] GetFilters() => filters.ToArray();
+
+		internal void AllocateFilters(out IntPtr pointer, out int length)
+		{
+			int filterSize = Marshal.SizeOf<MatchMakingKeyValuePair>();
+
+			length = filters.Count;
+			pointer = Marshal.AllocHGlobal( IntPtr.Size );
+
+			IntPtr arrayPointer = Marshal.AllocHGlobal( filterSize * length );
+			Marshal.WriteIntPtr( pointer, arrayPointer );
+
+			for ( int i = 0; i < length; i++ )
+			{
+				Marshal.StructureToPtr( filters[i], arrayPointer + i * filterSize, false );
+			}
+		}
+
+		internal void ReleaseFilters( IntPtr pointer, int length )
+		{
+			if (pointer == IntPtr.Zero)
+			{
+				return;
+			}
+			var arrayPointer = Marshal.ReadIntPtr( pointer );
+			Marshal.FreeHGlobal( arrayPointer );
+			Marshal.FreeHGlobal( pointer );
+		}
 
 		public void AddFilter( string key, string value )
 		{

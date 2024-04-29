@@ -102,12 +102,8 @@
 		<PropertyGroup>
 			<BuildProps>Configuration=Release;IsPackable=False</BuildProps>
 		</PropertyGroup>
-		<MSBuild Projects="$(MSBuildThisFileFullPath)" Targets="Build" 
-				 Properties="$(BuildProps);TargetOS=windows" 
-				 Condition="'$(TargetOS)' != 'windows'"/>
-		<MSBuild Projects="$(MSBuildThisFileFullPath)" Targets="Build" 
-				 Properties="$(BuildProps);TargetOS=unix" 
-				 Condition="'$(TargetOS)' != 'unix'"/>
+		<MSBuild Projects="$(MSBuildThisFileFullPath)" Targets="Build" Properties="$(BuildProps);TargetOS=windows" Condition="'$(TargetOS)' != 'windows'" />
+		<MSBuild Projects="$(MSBuildThisFileFullPath)" Targets="Build" Properties="$(BuildProps);TargetOS=unix" Condition="'$(TargetOS)' != 'unix'" />
 	</Target>
 
 </Project>

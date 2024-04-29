@@ -8,10 +8,9 @@ namespace Steamworks.ServerList
 {
 	public class Friends : Base
 	{
-		internal override void LaunchQuery()
+		internal override void LaunchQuery( IntPtr filters, uint filterCount )
 		{
-			var filters = GetFilters();
-			request = Internal.RequestFriendsServerList( AppId.Value, ref filters, (uint)filters.Length, IntPtr.Zero );
+			request = Internal.RequestFriendsServerList( AppId.Value, filters, filterCount, IntPtr.Zero );
 		}
 	}
 }
