@@ -9,8 +9,8 @@ using Steamworks.Data;
 namespace Steamworks
 {
     [TestClass]
-    [DeploymentItem( "steam_api64.dll" )]
-	[DeploymentItem( "steam_api.dll" )]
+	[DeploymentItem( TestAssets.Win64Lib )]
+	[DeploymentItem( TestAssets.Win32Lib )]
 	public class InventoryTest
 	{
 		[TestMethod]

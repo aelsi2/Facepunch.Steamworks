@@ -11,7 +11,8 @@
 		<TargetsForTfmSpecificContentInPackage>
 			$(TargetsForTfmSpecificContentInPackage);CopyManagedToPackage
 		</TargetsForTfmSpecificContentInPackage>
-		<TargetOS Condition="'$(TargetOS)' == ''">windows</TargetOS>
+		<TargetOS Condition="'$(TargetOS)' == '' And '$(OS)' == 'Windows_NT'">windows</TargetOS>
+		<TargetOS Condition="'$(TargetOS)' == '' And '$(OS)' == 'Unix'">unix</TargetOS>
 	</PropertyGroup>
 
 	<PropertyGroup Label="PackageInfo">

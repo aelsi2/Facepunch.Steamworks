@@ -5,10 +5,10 @@ using Steamworks.Data;
 
 namespace Steamworks
 {
-    [DeploymentItem( "steam_api64.dll" )]
-	[DeploymentItem( "steam_api.dll" )]
 	[TestClass]
-    public partial class GameServerTest
+	[DeploymentItem( TestAssets.Win64Lib )]
+	[DeploymentItem( TestAssets.Win32Lib )]
+	public partial class GameServerTest
     {
         [TestMethod]
         public void Init()
@@ -104,7 +104,7 @@ namespace Steamworks
 			// The client is leaving, and now wants to cancel the ticket
 			//
 
-			Assert.AreNotEqual( 0, clientTicket.Handle );
+			Assert.AreNotEqual( 0u, clientTicket.Handle );
 			clientTicket.Cancel();
 
 			//
