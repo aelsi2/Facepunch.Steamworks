@@ -17,7 +17,7 @@
 
 	<PropertyGroup Label="PackageInfo">
 		<PackageId>Facepunch.Steamworks</PackageId>
-		<Version>2.3.5</Version>
+		<Version>2.3.4</Version>
 		<Authors>Garry Newman, Andrey Eliseev</Authors>
 		<Description>Steamworks implementation with an emphasis on making things easy.</Description>
 		<PackageTags>facepunch;steam;steamworks;valve</PackageTags>
