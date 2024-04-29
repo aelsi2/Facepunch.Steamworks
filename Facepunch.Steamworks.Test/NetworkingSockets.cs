@@ -10,9 +10,9 @@ using Steamworks.Data;
 namespace Steamworks
 {
 	[TestClass]
-    [DeploymentItem( "steam_api64.dll" )]
-    [DeploymentItem( "steam_api.dll" )]
-    public partial class NetworkingSocketsTest
+	[DeploymentItem( TestAssets.Win64Lib )]
+	[DeploymentItem( TestAssets.Win32Lib )]
+	public partial class NetworkingSocketsTest
 	{
 		void DebugOutput( NetDebugOutput type, string text )
 		{

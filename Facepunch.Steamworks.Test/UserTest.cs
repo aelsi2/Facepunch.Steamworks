@@ -10,8 +10,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Steamworks
 {
     [TestClass]
-    [DeploymentItem( "steam_api64.dll" )]
-	[DeploymentItem( "steam_api.dll" )]
+	[DeploymentItem( TestAssets.Win64Lib )]
+	[DeploymentItem( TestAssets.Win32Lib )]
 	public class UserTest
     {
 		[TestMethod]
@@ -40,7 +40,7 @@ namespace Steamworks
 		public void OptimalSampleRate()
 		{
 			var rate = SteamUser.OptimalSampleRate;
-			Assert.AreNotEqual( rate, 0 );
+			Assert.AreNotEqual( rate, 0u );
 			Console.WriteLine( $"User.OptimalSampleRate: {SteamUser.OptimalSampleRate}" );
 		}
 
@@ -54,7 +54,7 @@ namespace Steamworks
 		[TestMethod]
 		public void SteamID()
 		{
-			Assert.AreNotEqual( 0, SteamClient.SteamId.Value );
+			Assert.AreNotEqual( 0ul, SteamClient.SteamId.Value );
 			Console.WriteLine( $"User.SteamID: {SteamClient.SteamId.Value}" );
 		}
 
@@ -63,7 +63,7 @@ namespace Steamworks
 		{
 			var ticket = SteamUser.GetAuthSessionTicket( SteamClient.SteamId );
 
-			Assert.AreNotEqual( 0, ticket.Handle );
+			Assert.AreNotEqual( 0u, ticket.Handle );
 			Assert.AreNotEqual( 0, ticket.Data.Length );
 			Console.WriteLine( $"ticket.Handle: {ticket.Handle}" );
 			Console.WriteLine( $"ticket.Data: { string.Join( "", ticket.Data.Select( x => x.ToString( "x" ) ) ) }" );
@@ -80,7 +80,7 @@ namespace Steamworks
 		{
 			var ticket = await SteamUser.GetAuthSessionTicketAsync( SteamClient.SteamId, 5.0 );
 
-			Assert.AreNotEqual( 0, ticket.Handle );
+			Assert.AreNotEqual( 0u, ticket.Handle );
 			Assert.AreNotEqual( 0, ticket.Data.Length );
 			Console.WriteLine( $"ticket.Handle: {ticket.Handle}" );
 			Console.WriteLine( $"ticket.Data: { string.Join( "", ticket.Data.Select( x => x.ToString( "x" ) ) ) }" );
@@ -91,7 +91,7 @@ namespace Steamworks
 		{
 			var ticket = await SteamUser.GetAuthTicketForWebApiAsync( "Test" );
 
-			Assert.AreNotEqual( 0, ticket.Handle );
+			Assert.AreNotEqual( 0u, ticket.Handle );
 			Assert.AreNotEqual( 0, ticket.Data.Length );
 			Console.WriteLine( $"ticket.Handle: {ticket.Handle}" );
 			Console.WriteLine( $"ticket.Data: { string.Join( "", ticket.Data.Select( x => x.ToString( "x" ) ) ) }" );

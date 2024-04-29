@@ -8,9 +8,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Steamworks
 {
     [TestClass]
-    [DeploymentItem( "steam_api64.dll" )]
-    [DeploymentItem( "steam_api.dll" )]
-    public class AppTest
+    [DeploymentItem( TestAssets.Win64Lib )]
+    [DeploymentItem( TestAssets.Win32Lib )]
+	public class AppTest
     {
 		[AssemblyInitialize]
 		public static void AssemblyInit( TestContext context )

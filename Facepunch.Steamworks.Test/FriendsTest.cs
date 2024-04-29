@@ -6,9 +6,9 @@ using Steamworks.Data;
 
 namespace Steamworks
 {
-	[DeploymentItem( "steam_api64.dll" )]
-	[DeploymentItem( "steam_api.dll" )]
 	[TestClass]
+	[DeploymentItem( TestAssets.Win64Lib )]
+	[DeploymentItem( TestAssets.Win32Lib )]
 	public class FriendsTest
 	{
 		[TestMethod]

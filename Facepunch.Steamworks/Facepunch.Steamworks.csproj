@@ -1,0 +1,113 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup Label="General">
+		<RootNamespace>Steamworks</RootNamespace>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<NoWarn>$(NoWarn),NU5131,CS1591</NoWarn>
+		<TargetsForTfmSpecificContentInPackage>
+			$(TargetsForTfmSpecificContentInPackage);CopyManagedToPackage
+		</TargetsForTfmSpecificContentInPackage>
+		<TargetOS Condition="'$(TargetOS)' == '' And '$(OS)' == 'Windows_NT'">windows</TargetOS>
+		<TargetOS Condition="'$(TargetOS)' == '' And '$(OS)' == 'Unix'">unix</TargetOS>
+	</PropertyGroup>
+
+	<PropertyGroup Label="PackageInfo">
+		<PackageId>Facepunch.Steamworks</PackageId>
+		<Version>2.3.5</Version>
+		<Authors>Garry Newman, Andrey Eliseev</Authors>
+		<Description>Steamworks implementation with an emphasis on making things easy.</Description>
+		<PackageTags>facepunch;steam;steamworks;valve</PackageTags>
+		<PackageIcon>icon.jpg</PackageIcon>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<PackageProjectUrl>https://github.com/Facepunch/Facepunch.Steamworks</PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/Facepunch/Facepunch.Steamworks</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
+
+	<PropertyGroup Label="BuildPaths">
+		<BinDir>$(MSBuildThisFileDirectory)bin/</BinDir>
+		<ObjDir>$(MSBuildThisFileDirectory)obj/</ObjDir>
+		<WindowsOutputPath>$(BinDir)$(Configuration)/windows/</WindowsOutputPath>
+		<UnixOutputPath>$(BinDir)$(Configuration)/unix/</UnixOutputPath>
+		<WindowsIntermediatePath>$(ObjDir)$(Configuration)/windows/</WindowsIntermediatePath>
+		<UnixIntermediatePath>$(ObjDir)$(Configuration)/unix/</UnixIntermediatePath>
+		<PackageOutputPath>$(BinDir)</PackageOutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetOS)' == 'windows'">
+		<DefineConstants>$(DefineConstants);PLATFORM_WIN</DefineConstants>
+		<OutputPath>$(WindowsOutputPath)</OutputPath>
+		<IntermediateOutputPath>$(WindowsIntermediatePath)</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetOS)' == 'unix'">
+		<DefineConstants>$(DefineConstants);PLATFORM_UNIX</DefineConstants>
+		<OutputPath>$(UnixOutputPath)</OutputPath>
+		<IntermediateOutputPath>$(UnixIntermediatePath)</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Label="AssetPaths">
+		<SolutionDir>$(MSBuildThisFileDirectory)../</SolutionDir>
+		<AssetsDir>$(MSBuildThisFileDirectory)Assets/</AssetsDir>
+		<RedistDir>$(AssetsDir)redistributable_bin/</RedistDir>
+	</PropertyGroup>
+
+	<ItemGroup Label="PackageAssets">
+		<None Include="$(SolutionDir)README.md" Pack="True" Visible="False">
+			<PackagePath>readme.md</PackagePath>
+		</None>
+		<None Include="$(AssetsDir)Facepunch.Steamworks.jpg" Pack="True">
+			<PackagePath>icon.jpg</PackagePath>
+		</None>
+		<None Include="$(RedistDir)/steam_api.dll" Pack="True">
+			<PackagePath>runtimes/win-x86/native/steam_api.dll</PackagePath>
+		</None>
+		<None Include="$(RedistDir)/win64/steam_api64.dll" Pack="True">
+			<PackagePath>runtimes/win-x64/native/steam_api.dll</PackagePath>
+		</None>
+		<None Include="$(RedistDir)/linux32/libsteam_api.so" Pack="True">
+			<PackagePath>runtimes/linux-x86/native/libsteam_api.so</PackagePath>
+		</None>
+		<None Include="$(RedistDir)/linux64/libsteam_api.so" Pack="True">
+			<PackagePath>runtimes/linux-x64/native/libsteam_api.so</PackagePath>
+		</None>
+		<None Include="$(RedistDir)/osx/libsteam_api.dylib" Pack="True">
+			<PackagePath>runtimes/osx-x64/native/libsteam_api.dylib</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<Target Name="CopyManagedToPackage" DependsOnTargets="BuildManaged">
+		<ItemGroup>
+			<TfmSpecificPackageFile Include="$(WindowsIntermediatePath)$(TargetFramework)/ref/$(AssemblyName).dll">
+				<PackagePath>ref/$(TargetFramework)/</PackagePath>
+			</TfmSpecificPackageFile>
+			<TfmSpecificPackageFile Include="$(WindowsOutputPath)$(TargetFramework)/$(AssemblyName).xml">
+				<PackagePath>ref/$(TargetFramework)/</PackagePath>
+			</TfmSpecificPackageFile>
+			<TfmSpecificPackageFile Include="$(WindowsOutputPath)$(TargetFramework)/$(AssemblyName).dll">
+				<PackagePath>runtimes/win/lib/$(TargetFramework)/</PackagePath>
+			</TfmSpecificPackageFile>
+			<TfmSpecificPackageFile Include="$(UnixOutputPath)$(TargetFramework)/$(AssemblyName).dll">
+				<PackagePath>runtimes/unix/lib/$(TargetFramework)/</PackagePath>
+			</TfmSpecificPackageFile>
+		</ItemGroup>
+	</Target>
+
+	<Target Name="BuildManaged">
+		<PropertyGroup>
+			<BuildProps>Configuration=Release;IsPackable=False</BuildProps>
+		</PropertyGroup>
+		<MSBuild Projects="$(MSBuildThisFileFullPath)" Targets="Build" 
+				 Properties="$(BuildProps);TargetOS=windows" 
+				 Condition="'$(TargetOS)' != 'windows'"/>
+		<MSBuild Projects="$(MSBuildThisFileFullPath)" Targets="Build" 
+				 Properties="$(BuildProps);TargetOS=unix" 
+				 Condition="'$(TargetOS)' != 'unix'"/>
+	</Target>
+
+</Project>
